@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, flash, redirect, url_for, jso
 import csv
 import io
 import os
+from functools import wraps
+import base64
 from dotenv import load_dotenv
 from database import init_database, save_donation, get_all_donations, get_donation_stats, backup_donations_to_json
 
@@ -16,8 +18,34 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'ai-world-leaders-fallback-key')
 # Get PayPal Client ID from environment
 PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID', '')
 
+# Admin credentials from environment variables
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'aiworldleaders2024')
+
 # Initialize database on startup
 init_database()
+
+def check_auth(username, password):
+    """Check if a username/password combination is valid."""
+    return username == ADMIN_USERNAME and password == ADMIN_PASSWORD
+
+def authenticate():
+    """Send a 401 response that enables basic auth"""
+    return make_response(
+        'Authentication required. Please enter your admin credentials.',
+        401,
+        {'WWW-Authenticate': 'Basic realm="Admin Area"'}
+    )
+
+def requires_auth(f):
+    """Decorator that requires HTTP Basic Authentication"""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
 
 @app.route('/')
 def home():
@@ -77,6 +105,7 @@ def donation_success():
         return jsonify({'status': 'error', 'message': 'Failed to record donation'}), 500
 
 @app.route('/admin/donations')
+@requires_auth
 def admin_donations():
     """Admin page to view all donations"""
     donations = get_all_donations()
@@ -84,6 +113,7 @@ def admin_donations():
     return render_template('admin_donations.html', donations=donations, stats=stats)
 
 @app.route('/admin/donations/export')
+@requires_auth
 def export_donations():
     """Export donations to CSV"""
     donations = get_all_donations()
@@ -117,6 +147,7 @@ def export_donations():
     return response
 
 @app.route('/admin/donations/backup')
+@requires_auth
 def backup_donations():
     """Create JSON backup of donations"""
     filename = backup_donations_to_json()
