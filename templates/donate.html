@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}Donate - AI World Leaders{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold text-white mb-4">Support Our Mission</h1>
+                <p class="lead text-white-50">Help us bring AI education to students in Cameroon and beyond</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Impact Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold mb-4">Your Impact</h2>
+                <p class="lead">
+                    Every donation directly supports our mission to democratize AI education. Here's how your contribution makes a difference:
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="impact-card text-center h-100">
+                    <div class="impact-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h4>$500</h4>
+                    <h5>One Laptop</h5>
+                    <p>Provides one AI-capable laptop for a student to keep after the workshop, enabling continued learning and development.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="impact-card text-center h-100">
+                    <div class="impact-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>$100</h4>
+                    <h5>Workshop Materials</h5>
+                    <p>Covers educational materials, resources, and supplies for 10 students during our 5-day intensive AI workshop.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="impact-card text-center h-100">
+                    <div class="impact-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h4>$50</h4>
+                    <h5>Travel Support</h5>
+                    <p>Helps cover travel expenses to bring our educational mission directly to students in Cameroon.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Donation Form Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="donation-card">
+                    <div class="card-header text-center">
+                        <h3 class="fw-bold mb-2">Make a Donation</h3>
+                        <p class="text-muted">Choose your contribution amount or enter a custom amount</p>
+                    </div>
+                    <div class="card-body">
+                        <!-- Quick Amount Selection -->
+                        <div class="amount-selection mb-4">
+                            <div class="row g-3">
+                                <div class="col-6 col-md-3">
+                                    <button class="btn btn-outline-primary w-100 amount-btn" data-amount="25">$25</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button class="btn btn-outline-primary w-100 amount-btn" data-amount="50">$50</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button class="btn btn-outline-primary w-100 amount-btn" data-amount="100">$100</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button class="btn btn-outline-primary w-100 amount-btn" data-amount="500">$500</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Amount Input -->
+                        <div class="mb-4">
+                            <label for="customAmount" class="form-label fw-semibold">Custom Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="customAmount" placeholder="Enter amount" min="1">
+                            </div>
+                        </div>
+
+                        <!-- Donor Information -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label fw-semibold">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label fw-semibold">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+
+                        <!-- Donation Type -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Donation Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="donationType" id="oneTime" value="oneTime" checked>
+                                <label class="form-check-label" for="oneTime">One-time donation</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="donationType" id="monthly" value="monthly">
+                                <label class="form-check-label" for="monthly">Monthly donation</label>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="mb-4">
+                            <label for="message" class="form-label fw-semibold">Message (Optional)</label>
+                            <textarea class="form-control" id="message" rows="3" placeholder="Share why you're supporting our mission..."></textarea>
+                        </div>
+
+                        <!-- PayPal Integration -->
+                        <div class="paypal-section">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>Secure Donation:</strong> All donations are processed securely through PayPal.
+                            </div>
+                            
+                            <!-- PayPal Donation Button -->
+                            <div class="paypal-button-container text-center py-4">
+                                <div id="paypal-button-container"></div>
+                            </div>
+                            
+                            <!-- Alternative PayPal Donate Button (Standard) -->
+                            <div class="text-center mt-3">
+                                <p class="text-muted mb-3">Or use the traditional PayPal donate button:</p>
+                                <form action="https://www.paypal.com/donate" method="post" target="_top">
+                                    <input type="hidden" name="business" value="aiworldleadersinc@gmail.com" />
+                                    <input type="hidden" name="no_recurring" value="0" />
+                                    <input type="hidden" name="item_name" value="AI World Leaders Education Mission" />
+                                    <input type="hidden" name="currency_code" value="USD" />
+                                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                                    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 fw-bold text-center mb-5">Donation FAQ</h2>
+                
+                <div class="accordion" id="donationFAQ">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How will my donation be used?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#donationFAQ">
+                            <div class="accordion-body">
+                                Your donation directly funds AI-capable laptops for students in Cameroon, travel expenses for our educational mission, and workshop materials. We're committed to transparency and will provide updates on how funds are utilized.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Is my donation tax-deductible?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#donationFAQ">
+                            <div class="accordion-body">
+                                We are in the process of obtaining our non-profit status. Once approved, donations will be tax-deductible. We will provide proper documentation for all contributions.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Can I donate items instead of money?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#donationFAQ">
+                            <div class="accordion-body">
+                                Yes! We accept donations of AI-capable laptops, educational materials, and other relevant technology. Please contact us to coordinate item donations and ensure they meet our technical requirements.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Will I receive updates on the project?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#donationFAQ">
+                            <div class="accordion-body">
+                                Absolutely! All donors will receive regular updates on our progress, including photos and stories from our trip to Cameroon, student testimonials, and information about future projects.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

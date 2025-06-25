@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Home - AI World Leaders{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-3 fw-bold text-white mb-4">
+                        Transforming Education Through <span class="gradient-text">Artificial Intelligence</span>
+                    </h1>
+                    <p class="lead text-white-50 mb-5">
+                        We're bridging the digital divide by bringing cutting-edge AI education to students in developing countries, empowering the next generation of innovators and leaders.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{{ url_for('donate') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-heart me-2"></i>Support Our Mission
+                        </a>
+                        <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-users me-2"></i>Meet the Team
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                        <h4>AI Education</h4>
+                        <p>Democratizing access to artificial intelligence knowledge</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold mb-4">Our Mission</h2>
+                <p class="lead mb-5">
+                    At AI World Leaders, we believe that artificial intelligence has the power to revolutionize education and innovation across the globe. Our mission is to break down barriers and provide students in developing countries with the tools, knowledge, and inspiration they need to become leaders in the AI revolution.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card h-100 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4>Education First</h4>
+                    <p>We provide comprehensive AI workshops and hands-on learning experiences that make complex concepts accessible to everyone.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h4>Technology Access</h4>
+                    <p>We supply AI-capable laptops to ensure students have the hardware needed to run modern AI models and applications.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4>Future Leaders</h4>
+                    <p>We inspire students to become innovators and visionaries who will drive technological advancement in their communities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cameroon Project Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-5 fw-bold mb-4">Journey to Cameroon</h2>
+                <p class="lead mb-4">
+                    This July, we're embarking on an exciting mission to Cameroon, where we'll conduct a comprehensive 5-day AI workshop for 100 eager students.
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">100</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Days</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Laptops</div>
+                    </div>
+                </div>
+                <p class="mt-4">
+                    Through this intensive program, students will learn about AI fundamentals, machine learning concepts, and practical applications. Fifteen students will receive laptops to continue their AI journey beyond the workshop.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="project-visual">
+                    <div class="timeline-card">
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fas fa-plane"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>Travel to Cameroon</h5>
+                                <p>Mid-July departure for our educational mission</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>5-Day Workshop</h5>
+                                <p>Intensive AI education program for 100 students</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>Laptop Distribution</h5>
+                                <p>15 students receive AI-capable laptops to keep</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold text-white mb-4">Help Us Make a Difference</h2>
+                <p class="lead text-white-50 mb-5">
+                    Your donation directly funds laptops for students and supports our educational mission to Cameroon. Every contribution helps us democratize AI education and create the next generation of innovators.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('donate') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-donate me-2"></i>Donate Now
+                    </a>
+                    <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
