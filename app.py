@@ -72,6 +72,27 @@ def contact():
     
     return render_template('contact.html')
 
+@app.route('/health')
+def health_check():
+    """Health check endpoint for Railway"""
+    try:
+        from database import test_database_connection
+        db_ok, db_msg = test_database_connection()
+        
+        return jsonify({
+            'status': 'healthy' if db_ok else 'partial',
+            'database': db_msg,
+            'environment_vars': {
+                'DATABASE_URL': 'present' if os.getenv('DATABASE_URL') else 'missing',
+                'PAYPAL_CLIENT_ID': 'present' if PAYPAL_CLIENT_ID else 'missing'
+            }
+        }), 200 if db_ok else 503
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
 @app.route('/donation-success', methods=['POST'])
 def donation_success():
     try:
