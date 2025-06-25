@@ -132,13 +132,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function showDonationSuccess(details) {
+        // Show a brief success message
         const alertDiv = document.createElement('div');
         alertDiv.className = 'alert alert-success alert-dismissible fade show';
         alertDiv.innerHTML = `
             <i class="fas fa-check-circle me-2"></i>
-            <strong>Thank you for your donation!</strong> Your contribution of $${details.purchase_units[0].amount.value} has been processed successfully.
-            Transaction ID: ${details.id}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Thank you for your donation!</strong> Redirecting you to see your impact...
         `;
         
         const container = document.querySelector('.paypal-section');
@@ -146,6 +145,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Scroll to success message
         alertDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Redirect to thank you page after a brief delay
+        setTimeout(() => {
+            const amount = details.purchase_units[0].amount.value;
+            window.location.href = `/thank-you?amount=${amount}`;
+        }, 2000);
     }
     
     function showDonationError(message) {

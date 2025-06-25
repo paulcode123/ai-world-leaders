@@ -72,6 +72,20 @@ def contact():
     
     return render_template('contact.html')
 
+@app.route('/privacy-policy')
+def privacy_policy():
+    from datetime import datetime
+    return render_template('privacy_policy.html', current_date=datetime.now().strftime('%B %d, %Y'))
+
+@app.route('/refund-policy')
+def refund_policy():
+    return render_template('refund_policy.html')
+
+@app.route('/thank-you')
+def thank_you():
+    donation_amount = request.args.get('amount', None)
+    return render_template('thank_you.html', donation_amount=donation_amount)
+
 @app.route('/health')
 def health_check():
     """Health check endpoint for Railway"""

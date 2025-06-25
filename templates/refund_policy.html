@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Refund Policy - AI World Leaders{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold text-white mb-4">Refund Policy</h1>
+                <p class="lead text-white-50">Information about donation refunds</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Refund Policy Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="legal-content">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Important:</strong> Please review this policy before making a donation.
+                    </div>
+
+                    <h2>Donation Refund Policy</h2>
+                    <p class="lead">All donations to AI World Leaders, Inc. are final.</p>
+
+                    <h3>When Refunds May Be Considered</h3>
+                    <p>While donations are generally final, we understand that errors can occur. We will consider refund requests in the following circumstances:</p>
+                    <ul>
+                        <li>Duplicate donations made in error</li>
+                        <li>Incorrect donation amounts due to technical issues</li>
+                        <li>Unauthorized transactions</li>
+                        <li>Other exceptional circumstances at our discretion</li>
+                    </ul>
+
+                    <h3>Refund Request Process</h3>
+                    <div class="process-steps">
+                        <div class="step mb-4">
+                            <h4><i class="fas fa-clock text-warning me-2"></i>Time Limit</h4>
+                            <p>Refund requests must be submitted within <strong>30 days</strong> of the original donation date.</p>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h4><i class="fas fa-envelope text-primary me-2"></i>How to Request</h4>
+                            <p>Email us at <a href="mailto:aiworldleadersinc@gmail.com" class="fw-bold">aiworldleadersinc@gmail.com</a> with the following information:</p>
+                            <ul>
+                                <li>Your full name</li>
+                                <li>Email address used for the donation</li>
+                                <li>Donation amount and date</li>
+                                <li>PayPal transaction ID (if available)</li>
+                                <li>Reason for the refund request</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h4><i class="fas fa-search text-info me-2"></i>Review Process</h4>
+                            <p>We will review your request within 5-7 business days and respond via email with our decision.</p>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <h4><i class="fas fa-credit-card text-success me-2"></i>Refund Processing</h4>
+                            <p>If approved, refunds will be processed back to your original payment method within 7-10 business days.</p>
+                        </div>
+                    </div>
+
+                    <h3>Important Notes</h3>
+                    <div class="alert alert-warning">
+                        <ul class="mb-0">
+                            <li>Refunds are processed at the sole discretion of AI World Leaders, Inc.</li>
+                            <li>Processing fees charged by PayPal are non-refundable</li>
+                            <li>Recurring donation cancellations do not automatically trigger refunds for past donations</li>
+                            <li>Tax deduction claims should be adjusted if a refund is issued</li>
+                        </ul>
+                    </div>
+
+                    <h3>Alternative to Refunds</h3>
+                    <p>If you're unable to receive a refund but would like to support a different cause, please contact us to discuss potential alternatives.</p>
+
+                    <h3>Contact Information</h3>
+                    <div class="contact-info bg-light p-4 rounded">
+                        <h4>AI World Leaders, Inc.</h4>
+                        <p><strong>Address:</strong><br>
+                        520 W 114th St, Apt 20<br>
+                        New York, NY 10025</p>
+                        <p><strong>Email:</strong> <a href="mailto:aiworldleadersinc@gmail.com">aiworldleadersinc@gmail.com</a></p>
+                        <p><strong>Response Time:</strong> We typically respond to refund requests within 5-7 business days.</p>
+                    </div>
+
+                    <hr class="my-5">
+                    
+                    <div class="nonprofit-disclosure">
+                        <h4>Nonprofit Status</h4>
+                        <p class="text-muted">AI World Leaders, Inc. is a registered nonprofit in New York State. As a newly formed nonprofit, our first annual report has not yet been filed.</p>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('donate') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-heart me-2"></i>Make a Donation
+                        </a>
+                        <a href="{{ url_for('contact') }}" class="btn btn-outline-secondary btn-lg ms-3">
+                            <i class="fas fa-envelope me-2"></i>Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
