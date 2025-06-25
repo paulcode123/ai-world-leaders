@@ -1,44 +1,80 @@
-import sqlite3
+import psycopg2
+import psycopg2.extras
 import json
 from datetime import datetime
 import os
 
-DATABASE_PATH = 'donations.db'
+def get_db_connection():
+    """Get database connection using Railway environment variables"""
+    # Railway provides these automatically when you add PostgreSQL
+    database_url = os.getenv('DATABASE_URL')
+    
+    if database_url:
+        # Use DATABASE_URL if available (Railway format)
+        return psycopg2.connect(database_url, sslmode='require')
+    else:
+        # Fallback to individual environment variables
+        return psycopg2.connect(
+            host=os.getenv('PGHOST', 'localhost'),
+            port=os.getenv('PGPORT', 5432),
+            database=os.getenv('PGDATABASE', 'donations'),
+            user=os.getenv('PGUSER', 'postgres'),
+            password=os.getenv('PGPASSWORD', ''),
+            sslmode='require'
+        )
 
 def init_database():
     """Initialize the donations database"""
-    conn = sqlite3.connect(DATABASE_PATH)
-    cursor = conn.cursor()
-    
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS donations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            first_name TEXT,
-            last_name TEXT,
-            email TEXT,
-            message TEXT,
-            amount REAL NOT NULL,
-            paypal_transaction_id TEXT UNIQUE,
-            paypal_payer_email TEXT,
-            donation_type TEXT DEFAULT 'oneTime',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    conn.commit()
-    conn.close()
-    print("Database initialized successfully")
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS donations (
+                id SERIAL PRIMARY KEY,
+                first_name VARCHAR(100),
+                last_name VARCHAR(100),
+                email VARCHAR(255),
+                message TEXT,
+                amount DECIMAL(10,2) NOT NULL,
+                paypal_transaction_id VARCHAR(255) UNIQUE,
+                paypal_payer_email VARCHAR(255),
+                donation_type VARCHAR(50) DEFAULT 'oneTime',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Create index for better performance
+        cursor.execute('''
+            CREATE INDEX IF NOT EXISTS idx_donations_created_at 
+            ON donations(created_at DESC)
+        ''')
+        
+        cursor.execute('''
+            CREATE INDEX IF NOT EXISTS idx_donations_transaction_id 
+            ON donations(paypal_transaction_id)
+        ''')
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("PostgreSQL database initialized successfully")
+        
+    except Exception as e:
+        print(f"Error initializing database: {str(e)}")
+        raise
 
 def save_donation(donation_data):
     """Save a donation to the database"""
     try:
-        conn = sqlite3.connect(DATABASE_PATH)
+        conn = get_db_connection()
         cursor = conn.cursor()
         
         cursor.execute('''
             INSERT INTO donations 
             (first_name, last_name, email, message, amount, paypal_transaction_id, paypal_payer_email, donation_type)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
         ''', (
             donation_data.get('first_name', ''),
             donation_data.get('last_name', ''),
@@ -50,25 +86,34 @@ def save_donation(donation_data):
             donation_data.get('donation_type', 'oneTime')
         ))
         
+        donation_id = cursor.fetchone()[0]
         conn.commit()
-        donation_id = cursor.lastrowid
+        cursor.close()
         conn.close()
         
         print(f"Donation saved successfully with ID: {donation_id}")
         return donation_id
         
-    except sqlite3.IntegrityError:
+    except psycopg2.IntegrityError:
         print(f"Donation with transaction ID {donation_data.get('transaction_id')} already exists")
+        if conn:
+            conn.rollback()
+            cursor.close()
+            conn.close()
         return None
     except Exception as e:
         print(f"Error saving donation: {str(e)}")
+        if conn:
+            conn.rollback()
+            cursor.close()
+            conn.close()
         return None
 
 def get_all_donations():
     """Get all donations from the database"""
     try:
-        conn = sqlite3.connect(DATABASE_PATH)
-        cursor = conn.cursor()
+        conn = get_db_connection()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         
         cursor.execute('''
             SELECT id, first_name, last_name, email, message, amount, 
@@ -78,23 +123,17 @@ def get_all_donations():
         ''')
         
         donations = cursor.fetchall()
+        cursor.close()
         conn.close()
         
-        # Convert to list of dictionaries
+        # Convert to list of dictionaries for compatibility
         donation_list = []
         for donation in donations:
-            donation_list.append({
-                'id': donation[0],
-                'first_name': donation[1],
-                'last_name': donation[2],
-                'email': donation[3],
-                'message': donation[4],
-                'amount': donation[5],
-                'paypal_transaction_id': donation[6],
-                'paypal_payer_email': donation[7],
-                'donation_type': donation[8],
-                'created_at': donation[9]
-            })
+            donation_dict = dict(donation)
+            # Convert datetime to string for JSON serialization
+            if donation_dict['created_at']:
+                donation_dict['created_at'] = donation_dict['created_at'].isoformat()
+            donation_list.append(donation_dict)
         
         return donation_list
         
@@ -105,23 +144,24 @@ def get_all_donations():
 def get_donation_stats():
     """Get basic donation statistics"""
     try:
-        conn = sqlite3.connect(DATABASE_PATH)
+        conn = get_db_connection()
         cursor = conn.cursor()
         
         # Total donations and amount
-        cursor.execute('SELECT COUNT(*), SUM(amount) FROM donations')
+        cursor.execute('SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM donations')
         count, total = cursor.fetchone()
         
         # Average donation
-        cursor.execute('SELECT AVG(amount) FROM donations')
+        cursor.execute('SELECT COALESCE(AVG(amount), 0) FROM donations WHERE amount > 0')
         average = cursor.fetchone()[0]
         
+        cursor.close()
         conn.close()
         
         return {
             'total_donations': count or 0,
-            'total_amount': total or 0,
-            'average_donation': round(average or 0, 2)
+            'total_amount': float(total or 0),
+            'average_donation': round(float(average or 0), 2)
         }
         
     except Exception as e:
@@ -152,6 +192,25 @@ def backup_donations_to_json():
         print(f"Error creating backup: {str(e)}")
         return None
 
-# Initialize database when module is imported
+def test_database_connection():
+    """Test database connection and return status"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT 1')
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        return True, "Database connection successful"
+    except Exception as e:
+        return False, f"Database connection failed: {str(e)}"
+
+# Initialize database when module is imported (but handle errors gracefully)
 if __name__ == "__main__":
-    init_database() 
+    init_database()
+else:
+    try:
+        init_database()
+    except Exception as e:
+        print(f"Database initialization warning: {str(e)}")
+        print("This is normal if DATABASE_URL is not yet configured.") 
