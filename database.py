@@ -205,16 +205,6 @@ def test_database_connection():
     except Exception as e:
         return False, f"Database connection failed: {str(e)}"
 
-# Initialize database when module is imported (but handle errors gracefully)
+# Only initialize database when explicitly called
 if __name__ == "__main__":
-    init_database()
-else:
-    # Only try to initialize if we're in a production environment with DATABASE_URL
-    if os.getenv('DATABASE_URL'):
-        try:
-            init_database()
-        except Exception as e:
-            print(f"Database initialization error: {str(e)}")
-            # Don't re-raise, let the app start anyway
-    else:
-        print("DATABASE_URL not found - skipping database initialization (normal for local development)") 
+    init_database() 
